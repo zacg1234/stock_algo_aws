@@ -1,0 +1,4 @@
+alpaca-py
+boto3
+requests
+decimal
