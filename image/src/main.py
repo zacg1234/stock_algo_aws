@@ -19,14 +19,34 @@ def handler(event, context):
 
     user = dynamoDB.get_user(None, None, user_name)
     alpaca_DAO = Alpaca_DAO(user.alpaca_key, user.alpaca_secret, user.alpaca_end_point, isPaper)
-
+    
     controller = Controller(bot, user, data, alpaca_DAO)
 
     # run_the_bot returns the updated user
-    # user = controller.run_the_bot()
-    # print(user.cash)
-    # dynamoDB.put_user(None, None, user)
-    return {"statusCode" : 200, "body" : "Run complete", "user cash" : user.cash} 
+    (user, price) = controller.run_the_bot()
+    
 
-if __name__ == "__main__":
-    handler()
+    dynamoDB.put_user(None, None, user)
+
+    return {"statusCode" : 200, 
+            "body" : 
+                { 
+                    "current_asset_price" : price,
+                    "name" : user.name, 
+                    "cash" : user.cash, 
+                    "asset_name" : user.asset_name,
+                    "asset_amount" : user.asset_amount,
+                    "current_buy_index" : user.buy_threshold_index,
+                    "current_sell_index" : user.sell_threshold_index,
+                    "last_touch_price" : user.last_touch_price,
+                    "initialized" : user.initialized
+                }
+            } 
+
+
+# if __name__ == "__main__":
+#     while True:
+#         print("******************* RUN BOT ********************")
+#         handler()
+#         time.sleep(10)#300)  # Sleep for 300 seconds (5 minutes)
+   

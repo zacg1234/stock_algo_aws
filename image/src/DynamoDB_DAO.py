@@ -3,11 +3,19 @@ from botocore.exceptions import ClientError
 from User_Obj import User
 
 from decimal import Decimal
+import math
+
+DECIMAL_PRECISION = 3
+
+def round(number):
+    factor = 10 ** DECIMAL_PRECISION 
+    return math.floor(number * factor) / factor
 
 class DynamoDB:
     def __init__(self):
         # Initialize a DynamoDB client
         self.db = boto3.resource('dynamodb', region_name='us-east-2')
+
 
     # Reading from the table
     def get_user(self, event, context, user_name):
@@ -43,12 +51,12 @@ class DynamoDB:
             table.put_item(
             Item={
                     'Username': user.name,
-                    'AssetAmount': user.asset_amount,
+                    'AssetAmount': Decimal(str(round(user.asset_amount))),
                     'AssetName': user.asset_name,
                     'BuyThresholdIndex': user.buy_threshold_index,
-                    'Cash': user.cash,
+                    'Cash': Decimal(str(round(user.cash))),
                     'Initialized': user.initialized,
-                    'LastTouchPrice': user.last_touch_price,
+                    'LastTouchPrice': Decimal(str(round(user.last_touch_price))),
                     'SellThresholdIndex': user.sell_threshold_index,
                     'AlpacaEndPoint': user.alpaca_end_point,
                     'AlpacaKey': user.alpaca_key,
@@ -57,16 +65,18 @@ class DynamoDB:
             )
         except ClientError as e:
             print(e.response['Error']['Message'])
+
+
         # else:
         #     print("Write successful")
         # return {
         #     'statusCode': 200,
         # }
 
-def decimal_default(obj):
-    if isinstance(obj, Decimal):
-        return float(obj)  # or use str(obj) if you want to preserve exact precision
-    raise TypeError
+# def decimal_default(obj):
+#     if isinstance(obj, Decimal):
+#         return float(obj)  # or use str(obj) if you want to preserve exact precision
+#     raise TypeError
 
 
 

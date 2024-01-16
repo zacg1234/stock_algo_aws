@@ -13,6 +13,11 @@ class Bot:
     #  TODO: add engulfing candle differentiation 
     # 
     def get_signal (self, prev_open_price, open_price, close_price, last_touch_price, buy_threshold_index, sell_threshold_index) :
+        close_price = float(close_price)
+        last_touch_price = float(last_touch_price)
+        sell_threshold_index = int(sell_threshold_index)
+        buy_threshold_index = int(buy_threshold_index)
+    
         percent_change = 100 * (close_price - last_touch_price)/last_touch_price
 
         if(close_price - last_touch_price > 0) : # Stock moving higher

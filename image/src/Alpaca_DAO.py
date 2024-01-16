@@ -1,9 +1,15 @@
 from alpaca.trading.client import TradingClient
 from alpaca.trading.requests import MarketOrderRequest
 from alpaca.trading.enums import OrderSide, TimeInForce
+import math
 
 BUY_SIGNAL = 1
 SELL_SIGNAL = -1
+DECIMAL_PRECISION = 3
+
+def round(number):
+    factor = 10 ** DECIMAL_PRECISION 
+    return math.floor(number * factor) / factor
 
 class Alpaca_DAO:
 
@@ -37,25 +43,25 @@ class Alpaca_DAO:
         # return market_order.filled_qty
         
     def get_user_net_worth(self):
-        return float(self.account.equity)
+        return round(float(self.account.equity))
     
     def get_user_cash(self):
-        return float(self.account.cash)
+        return round(float(self.account.cash))
     
     def get_user_asset_qty(self, ticker):
         positions = self.trading_client.get_all_positions()
         for position in positions:
             #print(position.current_price)
             if position.symbol == ticker:
-                return float(position.qty)
-        return -1
+                return round(float(position.qty))
+        return 0
             
     def get_user_asset_price(self, ticker):
         positions = self.trading_client.get_all_positions()
         for position in positions:
             #print(position.current_price)
             if position.symbol == ticker:
-                return float(position.current_price)
+                return round(float(position.current_price))
         return -1
 
 

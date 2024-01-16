@@ -11,3 +11,12 @@ class User:
         self.alpaca_key = ""
         self.alpaca_secret = ""
         self.initialized = False
+
+    def print_self(self):
+        print(f"NAME: {self.name}")
+        print(f"    CASH: {self.cash}")
+        print(f"    ASSET NAME: {self.asset_name}, AMOUNT: {self.asset_amount}")
+        print(f"    BUY INDEX: {self.buy_threshold_index}")
+        print(f"    SELL INDEX: {self.sell_threshold_index}")
+        print(f"    LAST TOUCH PRICE: {self.last_touch_price}")
+        print(f"        INITIALIZED ? : {self.initialized}")

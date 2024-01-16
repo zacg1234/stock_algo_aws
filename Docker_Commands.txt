@@ -1,0 +1,17 @@
+For local testing:
+
+cd image
+docker build -t docker-image:test . 
+docker run -p 9000:8080 -v ~/.aws:/root/.aws docker-image:test
+
+
+
+Dif Terminal:
+curl "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
+
+
+To deploy:
+	(Run once per acount per region)
+cdk bootstrap --region us-east-2
+
+cdk deploy

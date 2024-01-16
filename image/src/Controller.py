@@ -1,22 +1,25 @@
-from decimal import Decimal, getcontext, ROUND_FLOOR
+import math
 
 BUY_SIGNAL = 1
 SELL_SIGNAL = -1
 DECIMAL_PRECISION = 3
 
+def get_user_net_worth(user, stock_price):
+    return round((user.asset_amount * stock_price) + user.cash)
+
+def cash_to_shares(cash_amount, stock_price):
+    return round(cash_amount / stock_price)
+
+def round(number):
+    factor = 10 ** DECIMAL_PRECISION 
+    return math.floor(number * factor) / factor
+    #return number
+
 class Controller:
 
-    @staticmethod
-    def user_net_worth(user, stock_price):
-        return Decimal((user.asset_amount * stock_price) + user.cash)
-    
-    @staticmethod
-    def cash_to_shares(cash_amount, stock_price):
-        return Decimal(Decimal(cash_amount) / Decimal(stock_price))
-
     # bot has a method getSignal that returns a trade signal
-    # users is the data access object for the database of users
-    #   data is the inflow of market data - IN TESTING THE DATA MUST MATCH THE USER HELD ASSET
+    # user is the data access object for the database of users
+    # data is the inflow of market data - IN TESTING THE DATA MUST MATCH THE USER HELD ASSET
     def __init__(self, bot, user_obj, data, broker):
         self.bot = bot
         self.user_obj = user_obj
@@ -25,41 +28,39 @@ class Controller:
 
    
     def run_the_bot(self):
-
-        getcontext().prec = DECIMAL_PRECISION
-        getcontext().rounding = ROUND_FLOOR
     
         # User object with user data
         user = self.user_obj
         buy_sell_max_index = len(self.bot.buyThresholds) - 1
         ticker = user.asset_name
 
-        asset_qty = Decimal(self.broker.get_user_asset_qty(ticker))
+        ##  UPDATE USER PROFILE
+        user.cash = self.broker.get_user_cash()
+        user.asset_amount = self.broker.get_user_asset_qty(ticker)
 
         if not user.initialized:
             # Current share price - from 3rd party (not broker)
-            share_price = Decimal(self.data.get_current_price(ticker))
-            if asset_qty <= 0:
-                shares_to_buy = Controller.cash_to_shares(user.cash / 2, share_price)
+            share_price = self.data.get_current_price(ticker)
+            if user.asset_amount <= 0:
+                shares_to_buy = cash_to_shares(user.cash / 2, share_price)
                 self.broker.place_market_order(ticker, shares_to_buy, BUY_SIGNAL)
-            else: # A check to make sure that user was properly initialized
-                user.asset_amount = asset_qty
+            # A check to make sure that user was properly initialized
+            else: 
                 user.buy_threshold_index = int((buy_sell_max_index / 2))
-                user.initialized = True
                 user.last_touch_price = share_price
-            return user
+                user.initialized = True
+
+            # Upload the initialized user
+            return (user, share_price)
+                
         
         # Current share price - from broker
-        share_price = Decimal(self.broker.get_user_asset_price(ticker))
-
-        ##  UPDATE USER PROFILE
-        user.cash = Decimal(self.broker.get_user_cash())
-        user.asset_amount = asset_qty
+        share_price = round(self.broker.get_user_asset_price(ticker))
         # User net worth
-        user_net_worth = Controller.user_net_worth(user, share_price)
+        user_net_worth = get_user_net_worth(user, share_price)
 
         # Shares to buy or sell if there is a signal
-        shares_to_buy_or_sell = Controller.cash_to_shares( Decimal(user_net_worth * 0.1), share_price )
+        shares_to_buy_or_sell = cash_to_shares( user_net_worth * 0.1, share_price )
         signal = self.bot.get_signal(None, None, share_price, user.last_touch_price, user.buy_threshold_index, user.sell_threshold_index)
         
         if signal == BUY_SIGNAL :
@@ -82,11 +83,8 @@ class Controller:
                 if user.sell_threshold_index < buy_sell_max_index:
                     user.sell_threshold_index = user.sell_threshold_index + 1
 
-
-        # user.cash = self.broker.get_user_cash()
-        # asset_qty = self.broker.get_user_asset_qty(ticker)
         ## RETURN UPDATED USER
-        return user
+        return (user, share_price)
 
 
 # @staticmethod

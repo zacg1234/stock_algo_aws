@@ -1,5 +1,12 @@
 import requests
+import math
 
+DECIMAL_PRECISION = 3
+
+def round(number):
+    factor = 10 ** DECIMAL_PRECISION 
+    return math.floor(number * factor) / factor
+        #return number
 
 class RealTimeData:
 
@@ -19,7 +26,7 @@ class RealTimeData:
         response_json = response.json()
         if response_json["status"] == "OK":
             response_data = response_json["data"]
-            return response_data["price"]
+            return round(response_data["price"])
         return -1
 
 
