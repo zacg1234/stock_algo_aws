@@ -16,7 +16,6 @@ class DynamoDB:
         # Initialize a DynamoDB client
         self.db = boto3.resource('dynamodb', region_name='us-east-2')
 
-
     # Reading from the table
     def get_user(self, event, context, user_name):
         table = self.db.Table('Trade_Bot_Users')
@@ -67,47 +66,22 @@ class DynamoDB:
             print(e.response['Error']['Message'])
 
 
-        # else:
-        #     print("Write successful")
-        # return {
-        #     'statusCode': 200,
-        # }
+if __name__ == "__main__":
+    # Test get_user function
+    dynamoDB = DynamoDB()
+    test_username = "zacg1234"
+    result = dynamoDB.get_user(None, None, test_username)
+    print(result.__dict__)
 
-# def decimal_default(obj):
-#     if isinstance(obj, Decimal):
-#         return float(obj)  # or use str(obj) if you want to preserve exact precision
-#     raise TypeError
+    user = User("paper", 100000)
+    user.asset = "TSLA"
+    user.asset_amount = Decimal(str(0.0))
+    user.buy_threshold_index = 0
+    user.last_touch_price = 0  
+    user.sell_threshold_index = 0
+    user.initialized = False
+    user.alpaca_end_point = "https://paper-api.alpaca.markets"
+    user.alpaca_key = "PK403VGBTVGM48SQE7GK"
+    user.alpaca_secret = "n5EaA80zDKVa0wx99gf2KZ9NXrlekTNN49iZdWcJ"
 
-
-
-
-# if __name__ == "__main__":
-#     # Test get_user function
-#     dynamoDB = DynamoDB()
-#     test_username = "zacg1234"
-#     result = dynamoDB.get_user(None, None, test_username)
-#     print(result.__dict__)
-    # json_string = json.dumps(result['body'], indent=4, default=decimal_default)
-    # print(json_string)
-
-#     # user = User("zacg1234", 0)
-#     # user.asset = "TSLA"
-#     # user.asset_amount = Decimal(str(0.0))
-#     # user.buy_threshold_index = 0
-#     # user.last_touch_price = 0  
-#     # user.sell_threshold_index = 0
-#     # user.initialized = False
-#     # put_user(None,None, user)
-    
-#     user = User("paper", 100000)
-#     user.asset = "TSLA"
-#     user.asset_amount = Decimal(str(0.0))
-#     user.buy_threshold_index = 0
-#     user.last_touch_price = 0  
-#     user.sell_threshold_index = 0
-#     user.initialized = False
-#     user.alpaca_end_point = "https://paper-api.alpaca.markets"
-#     user.alpaca_key = "PK403VGBTVGM48SQE7GK"
-#     user.alpaca_secret = "n5EaA80zDKVa0wx99gf2KZ9NXrlekTNN49iZdWcJ"
-
-#     print(put_user(None,None, user))
+    print(dynamoDB.put_user(None,None, user))

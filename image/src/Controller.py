@@ -13,7 +13,6 @@ def cash_to_shares(cash_amount, stock_price):
 def round(number):
     factor = 10 ** DECIMAL_PRECISION 
     return math.floor(number * factor) / factor
-    #return number
 
 class Controller:
 
@@ -85,28 +84,3 @@ class Controller:
 
         ## RETURN UPDATED USER
         return (user, share_price)
-
-
-# @staticmethod
-# def investment_quantity(user, stock_price):
-#     return Controller.user_net_worth(user, stock_price) / 10 
-
-# def sell_shares(self, user, shares_to_sell, share_price):
-#     if user.asset_amount > shares_to_sell: 
-#         # User has enough shares to sell
-#         user.last_touch_price = share_price
-#         self.user_dao.increment_sell_threshold_index(user.name)
-#         return True #success
-#     return False #failure
-
-# def buy_shares(self, user, shares_to_buy, share_price):
-#     required_cash = shares_to_buy * share_price
-#     user_cash = self.user_dao.get_cash(user.name, required_cash)
-#     if user_cash > 0: #user has enough cash
-#         self.user_dao.add_asset(user.name, user.asset_name, shares_to_buy)
-#         user.last_touch_price = share_price
-#         if user.initialized:
-#             self.user_dao.increment_buy_threshold_index(user.name)
-#         return True #success
-#     return False #failure
-    

@@ -44,9 +44,8 @@ def handler(event, context):
             } 
 
 
-# if __name__ == "__main__":
-#     while True:
-#         print("******************* RUN BOT ********************")
-#         handler()
-#         time.sleep(10)#300)  # Sleep for 300 seconds (5 minutes)
+if __name__ == "__main__":
+    print("******************* RUN BOT ********************")
+    handler()
+    #time.sleep(10)#300)  # Sleep for 300 seconds (5 minutes)
    

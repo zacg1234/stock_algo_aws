@@ -69,10 +69,10 @@ class Alpaca_DAO:
 
 if __name__ == "__main__":
     alpaca_DAO = Alpaca_DAO("PKBBMR9398054464GH1G", "qM1KwggH5ePUx5j3vo0Sfah58sykaGlTHLBopdK7", "https://paper-api.alpaca.markets", True)
-    # net_worth = alpaca_DAO.get_user_net_worth()
-    # print(net_worth)
-    #print(f'Market order filled: {alpaca_DAO.place_market_order("TSLA", 1.2, BUY_SIGNAL)}')
-    # print(f'User asset qty: {alpaca_DAO.get_user_asset_qty("TSLA")}')
-    # print(f'Asset price: {alpaca_DAO.get_user_asset_price("TSLA")}')
-    # print(alpaca_DAO.get_user_cash())
-    # print(alpaca_DAO.get_user_net_worth())
+    net_worth = alpaca_DAO.get_user_net_worth()
+    print(net_worth)
+    print(f'Market order filled: {alpaca_DAO.place_market_order("TSLA", 1.2, BUY_SIGNAL)}')
+    print(f'User asset qty: {alpaca_DAO.get_user_asset_qty("TSLA")}')
+    print(f'Asset price: {alpaca_DAO.get_user_asset_price("TSLA")}')
+    print(alpaca_DAO.get_user_cash())
+    print(alpaca_DAO.get_user_net_worth())
