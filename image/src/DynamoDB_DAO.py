@@ -52,11 +52,11 @@ class DynamoDB:
                     'Username': user.name,
                     'AssetAmount': Decimal(str(round(user.asset_amount))),
                     'AssetName': user.asset_name,
-                    'BuyThresholdIndex': user.buy_threshold_index,
+                    'BuyThresholdIndex': int(user.buy_threshold_index),
                     'Cash': Decimal(str(round(user.cash))),
                     'Initialized': user.initialized,
                     'LastTouchPrice': Decimal(str(round(user.last_touch_price))),
-                    'SellThresholdIndex': user.sell_threshold_index,
+                    'SellThresholdIndex': int(user.sell_threshold_index),
                     'AlpacaEndPoint': user.alpaca_end_point,
                     'AlpacaKey': user.alpaca_key,
                     'AlpacaSecret': user.alpaca_secret

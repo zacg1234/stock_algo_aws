@@ -63,6 +63,9 @@ class Alpaca_DAO:
             if position.symbol == ticker:
                 return round(float(position.current_price))
         return -1
+    
+    def cancel_pending_orders(self):
+        self.trading_client.cancel_orders()
 
 
 ### API keys and endpoints can be found in users: paper and zacg1234 respectively

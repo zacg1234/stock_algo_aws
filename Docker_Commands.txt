@@ -1,8 +1,8 @@
 For local testing:
 
 cd image
-docker build -t docker-image:test . 
-docker run -p 9000:8080 -v ~/.aws:/root/.aws docker-image:test
+docker build -t stock_algo_aws:prod . 
+docker run -p 9000:8080 -v ~/.aws:/root/.aws stock_algo_aws:prod
 
 
 

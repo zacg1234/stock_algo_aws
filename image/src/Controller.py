@@ -27,6 +27,9 @@ class Controller:
 
    
     def run_the_bot(self):
+
+        # TODO:
+        #self.broker.cancel_pending_orders()
     
         # User object with user data
         user = self.user_obj
@@ -65,7 +68,7 @@ class Controller:
         if signal == BUY_SIGNAL :
             if user.cash >= shares_to_buy_or_sell * share_price: 
                 # User has enough cash
-                self.broker.place_market_order(self, ticker, shares_to_buy_or_sell, BUY_SIGNAL)
+                self.broker.place_market_order(ticker, shares_to_buy_or_sell, BUY_SIGNAL)
                 user.last_touch_price = share_price
 
                 user.sell_threshold_index = 0
@@ -75,7 +78,7 @@ class Controller:
         elif signal == SELL_SIGNAL:
             if user.asset_amount >= shares_to_buy_or_sell: 
                 # User has enough shares to sell
-                self.broker.place_market_order(self, ticker, shares_to_buy_or_sell, SELL_SIGNAL)
+                self.broker.place_market_order(ticker, shares_to_buy_or_sell, SELL_SIGNAL)
                 user.last_touch_price = share_price
 
                 user.buy_threshold_index = 0
